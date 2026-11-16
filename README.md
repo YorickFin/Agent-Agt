@@ -42,7 +42,7 @@ npx agent-agt@latest init
 npx skills remove --global -a trae-cn agent-agt-*
 ```
 
-从 v2 升级：v3 不再安装扩展，请先卸载旧的 `yorickfin.agent-agt-orchestrator`，并手动清理 `~/.trae-cn/shared/references/`。旧的 `~/.trae-cn/skills/agent-agt-*` 用 `npx skills remove --global -a trae-cn agent-agt-*` 清理，避免 Trae 同时加载新旧两套。
+从 v2 升级：v3 不再安装扩展，请先卸载旧的 `yorickfin.parallelagent-orchestrator`，并手动清理 `~/.trae-cn/shared/references/`。旧的 `~/.trae-cn/skills/parallelagent-*` 用 `npx skills remove --global -a trae-cn parallelagent-*` 清理，避免 Trae 同时加载新旧两套。
 
 ### 其他宿主
 

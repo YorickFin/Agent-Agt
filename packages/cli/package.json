@@ -1,18 +1,18 @@
 {
-  "name": "parallelagent",
-  "version": "3.1.0",
-  "description": "ParallelAgent v3 共享数据安装器：复制 reference / 模板 / 能力档案模板；Skill 安装与卸载交给 npx skills 或 gh skill",
+  "name": "agent-agt",
+  "version": "3.2.0",
+  "description": "Agent-Agt v3 共享数据安装器：复制 reference / 模板 / 能力档案模板；Skill 安装与卸载交给 npx skills 或 gh skill",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YorickFin/ParallelAgent"
+    "url": "https://github.com/YorickFin/Agent-Agt"
   },
-  "homepage": "https://github.com/YorickFin/ParallelAgent",
+  "homepage": "https://github.com/YorickFin/Agent-Agt",
   "bugs": {
-    "url": "https://github.com/YorickFin/ParallelAgent/issues"
+    "url": "https://github.com/YorickFin/Agent-Agt/issues"
   },
   "bin": {
-    "parallelagent": "./index.js"
+    "agent-agt": "./index.js"
   },
   "files": [
     "index.js",

@@ -1,19 +1,19 @@
 ---
-name: parallelagent-solo
-description: 强制触发：ParallelAgent 单轨入口。凡新建或修改项目内文件（代码、配置、文档），或用户提到 ParallelAgent、分流、任务卡、台账、契约、回执、并行、拆轨、v3 协议与模板，必须先调用本技能，再按分流判据执行；禁止跳过本技能直接改文件或直接产出。仅纯问答、查资料、评审不适用。
-version: 3.1.0
+name: agent-agt-solo
+description: 强制触发：Agent-Agt 单轨入口。凡新建或修改项目内文件（代码、配置、文档），或用户提到 Agent-Agt、分流、任务卡、台账、契约、回执、并行、拆轨、v3 协议与模板，必须先调用本技能，再按分流判据执行；禁止跳过本技能直接改文件或直接产出。仅纯问答、查资料、评审不适用。
+version: 3.2.0
 ---
 
-# ParallelAgent 单轨（solo）
+# Agent-Agt 单轨（solo）
 
 ## 依赖
 
-- `~/.parallel-agent/references/分流.md`（判据）
-- `~/.parallel-agent/references/台账.md`（台账规则）
-- `~/.parallel-agent/references/协议.md`（字段与命名）
-- `~/.parallel-agent/templates/`（分流卡、任务卡、台账条目、交接手册）
+- `~/.agent-agt/references/分流.md`（判据）
+- `~/.agent-agt/references/台账.md`（台账规则）
+- `~/.agent-agt/references/协议.md`（字段与命名）
+- `~/.agent-agt/templates/`（分流卡、任务卡、台账条目、交接手册）
 
-缺失时先提示用户运行 `npx parallelagent@latest init`，不要凭空猜规则。
+缺失时先提示用户运行 `npx agent-agt@latest init`，不要凭空猜规则。
 
 **被问及协议、字段、流程时**：直接读上述文件回答，**不要凭记忆**，也不要假设其他 Skill 的正文已加载（Skill 正文按需加载，未调用时只可见名称与描述）。
 

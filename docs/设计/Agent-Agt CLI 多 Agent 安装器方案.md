@@ -1,4 +1,4 @@
-# ParallelAgent CLI 多 Agent 安装器方案
+# Agent-Agt CLI 多 Agent 安装器方案
 
 - 状态：**已废弃（Superseded，2026-10-31）**
 - 决策：不再自研多 Agent 安装/链接/卸载。通用安装与卸载交给上游 `npx skills`（vercel-labs/skills，覆盖 75+ Agent）或 `gh skill`；本仓库 CLI 只保留共享数据（references / templates / hosts）安装，不建链接、不删除文件。
@@ -91,7 +91,7 @@
 3. **零依赖**：只用 Node 内置 `fs/os/path`。
 4. **可逆**：所有安装、链接、删除都记录在状态文件；`remove` 只删除自己管理的内容。
 5. **验证优先**：未验证 Agent 不进入默认 `--all`，避免“装了但宿主不识别”。
-6. **共享数据独立**：`~/.parallel-agent` 继续存放 references/templates/hosts/能力档案，与 Agent 安装位置解耦。
+6. **共享数据独立**：`~/.agent-agt` 继续存放 references/templates/hosts/能力档案，与 Agent 安装位置解耦。
 
 ---
 
@@ -138,10 +138,10 @@
 
 ```
 ~/.agents/skills/                     # canonical
-~/.trae-cn/skills/parallelagent-*     # junction/symlink -> canonical
-~/.claude/skills/parallelagent-*      # junction/symlink -> canonical
-~/.parallel-agent/                    # 共享 references/templates/hosts/能力档案
-~/.parallel-agent/install-state.json  # 安装状态（按 agent + scope 分条）
+~/.trae-cn/skills/agent-agt-*     # junction/symlink -> canonical
+~/.claude/skills/agent-agt-*      # junction/symlink -> canonical
+~/.agent-agt/                    # 共享 references/templates/hosts/能力档案
+~/.agent-agt/install-state.json  # 安装状态（按 agent + scope 分条）
 ```
 
 项目（`--project`）：
@@ -154,14 +154,14 @@
 ### 5.3 命令与参数
 
 ```text
-parallelagent init [--agent <name...>] [--all]
+agent-agt init [--agent <name...>] [--all]
                    [--global|--project] [--copy|--link]
                    [--skills-dir <dir>] [--dry-run] [--force] [-y]
-parallelagent list
-parallelagent check
-parallelagent update [--agent ...] [--all]
-parallelagent remove [--agent ...] [--all] [-y]
-parallelagent doctor
+agent-agt list
+agent-agt check
+agent-agt update [--agent ...] [--all]
+agent-agt remove [--agent ...] [--all] [-y]
+agent-agt doctor
 ```
 
 - `init` 默认 `agents` + 全局；`--all` 安装到全部 `verified` Agent。
@@ -176,7 +176,7 @@ parallelagent doctor
 
 ### 5.4 状态文件
 
-`~/.parallel-agent/install-state.json` 升级为：
+`~/.agent-agt/install-state.json` 升级为：
 
 ```json
 {
@@ -187,7 +187,7 @@ parallelagent doctor
     "agents": { "scope": "global", "skillsDir": "~/.agents/skills", "files": {} },
     "trae-cn": { "scope": "global", "skillsDir": "~/.trae-cn/skills", "files": {} }
   },
-  "shared": { "dataDir": "~/.parallel-agent", "files": {} }
+  "shared": { "dataDir": "~/.agent-agt", "files": {} }
 }
 ```
 
@@ -256,7 +256,7 @@ parallelagent doctor
 
 - 旧 `install-state.json`（`schema_version: 1`）读取后迁移；`能力档案` 不覆盖。
 - 当前 `agents` 默认安装的用户：第一次 `init` 会补建链接；旧 `trae-cn` 副本可按需 `remove`。
-- 回滚：`git revert` 实施提交；或 `npx parallelagent@3.0.0 init --host trae-cn` 回到旧布局。
+- 回滚：`git revert` 实施提交；或 `npx agent-agt@3.0.0 init --host trae-cn` 回到旧布局。
 - 版本建议：行为变更较大，实施时 bump 到 `3.1.0`，并同步 `skills/*/SKILL.md` 的 `version`。
 
 ---

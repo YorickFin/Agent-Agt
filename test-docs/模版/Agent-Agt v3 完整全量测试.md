@@ -1,22 +1,22 @@
-# ParallelAgent v3 完整全量测试
+# Agent-Agt v3 完整全量测试
 
 > **用途**：在一个**空项目**里打开 Trae，把下面「提示词正文」整段交给 AI 执行。
 > **目标**：覆盖 v3 全部治理与执行能力——L0-L4、fail-stop、越界注入、失败重跑、能力档案校验、冷启动、台账审计、安装器边界。
 > **与最小全量的区别**：最小只验证主链路（M00-M04）；本测试逐层加压，专门验证**失败路径与治理约束**是否真的生效。
-> **使用前替换**：`<ParallelAgentv3仓库>` → `<ParallelAgentv3仓库绝对路径>`（只读参考，不在其中改动）。
+> **使用前替换**：`<Agent-Agtv3仓库>` → `<Agent-Agtv3仓库绝对路径>`（只读参考，不在其中改动）。
 
 ---
 
 ## 提示词正文
 
-你是 **ParallelAgent v3 完整全量测试**的执行者。当前项目是空项目。你要按用例逐项取证，在项目根写 `ParallelAgent v3 完整全量测试报告.md`。
+你是 **Agent-Agt v3 完整全量测试**的执行者。当前项目是空项目。你要按用例逐项取证，在项目根写 `Agent-Agt v3 完整全量测试报告.md`。
 
 ### 0. 硬性规则
 
 1. **不许编造结果**。未执行标 `BLOCKED`，写清原因与前置。
 2. 证据只认可核对内容：路径 + 内容、命令 + 输出/退出码、`git diff`、文件列表。禁止“已测试”“应该没问题”。
-3. **不要修改被测对象**：`~/.trae-cn/skills/parallelagent-*`、`~/.parallel-agent/references|templates|hosts`、`~/.parallel-agent/能力档案/trae-cn.md`（F08 例外，且必须先备份后恢复）。
-4. 不要改 `<ParallelAgentv3仓库>`。
+3. **不要修改被测对象**：`~/.trae-cn/skills/agent-agt-*`、`~/.agent-agt/references|templates|hosts`、`~/.agent-agt/能力档案/trae-cn.md`（F08 例外，且必须先备份后恢复）。
+4. 不要改 `<Agent-Agtv3仓库>`。
 5. Skill 未激活 → 记 FAIL，不得手工模拟流程。
 6. **确认门**：L1 回答、L2 方案选择、L3 验收确认、L4 拆轨确认、越界注入授权、破坏性操作、F08 选项，都必须停下来问用户，不得自问自答。
 7. 每完成一个用例立即写报告，不要最后补写。
@@ -28,17 +28,17 @@
 "PROJECT=$PWD"
 "NODE=$(node -v)"
 "GIT=$(git --version)"
-Get-ChildItem "$env:USERPROFILE\.trae-cn\skills" | Where-Object Name -match 'parallelagent' | Select-Object Name
-Get-ChildItem "$env:USERPROFILE\.parallel-agent" -Recurse -File | Select-Object FullName
-Get-Content "$env:USERPROFILE\.parallel-agent\能力档案\trae-cn.md" -TotalCount 20
-Get-Content "$env:USERPROFILE\.parallel-agent\install-state.json" -TotalCount 20
+Get-ChildItem "$env:USERPROFILE\.trae-cn\skills" | Where-Object Name -match 'agent-agt' | Select-Object Name
+Get-ChildItem "$env:USERPROFILE\.agent-agt" -Recurse -File | Select-Object FullName
+Get-Content "$env:USERPROFILE\.agent-agt\能力档案\trae-cn.md" -TotalCount 20
+Get-Content "$env:USERPROFILE\.agent-agt\install-state.json" -TotalCount 20
 ```
 
 判定表：
 
 | 检查 | 期望 |
 |---|---|
-| 三个 Skill | `parallelagent-solo/arbiter/track` 均存在 |
+| 三个 Skill | `agent-agt-solo/arbiter/track` 均存在 |
 | 数据目录 | `references/` 3 份、`templates/` 8 份、`hosts/` 2 份 |
 | 能力档案 | `schema_version: 1`、`max_concurrency: 5`、`confidence: 实测` |
 | install-state | 含 `version`、`skillsDir`、`files` 校验和 |
@@ -54,7 +54,7 @@ git init
 `package.json`
 ```json
 {
-  "name": "pa-v3-full-test",
+  "name": "agt-v3-full-test",
   "private": true,
   "type": "module",
   "scripts": { "test": "node --test" }
@@ -203,7 +203,7 @@ node --test
 
 步骤：
 
-1. 备份 `~/.parallel-agent/能力档案/trae-cn.md` 到同目录 `trae-cn.md.bak`
+1. 备份 `~/.agent-agt/能力档案/trae-cn.md` 到同目录 `trae-cn.md.bak`
 2. 把 `schema_version: 1` 改为 `999`
 3. 发起任一次 L4 预检（可复用 F06 的请求或新建一次小 L4）
 4. 观察是否**提示三选一**（立即重测 / 暂用旧档案 / 其它），而不是静默沿用
@@ -227,7 +227,7 @@ node --test
 
 在新会话发送：
 
-> 读 `.parallel-agent/` 下的台账、快照与最新交接手册，说明当前完成态、欠账、重跑方式与下一步。
+> 读 `.agent-agt/` 下的台账、快照与最新交接手册，说明当前完成态、欠账、重跑方式与下一步。
 
 预期：准确复述阶段、已完成轨、欠账、重跑方式；不重复已答问题；不臆造未发生的事。
 
@@ -236,9 +236,9 @@ node --test
 #### F12 台账审计
 
 ```powershell
-Get-ChildItem .parallel-agent\单轨\台账
-Get-Content .parallel-agent\单轨\台账\*.md
-git log --oneline -- .parallel-agent/单轨/台账
+Get-ChildItem .agent-agt\单轨\台账
+Get-Content .agent-agt\单轨\台账\*.md
+git log --oneline -- .agent-agt/单轨/台账
 ```
 
 判定：
@@ -251,11 +251,11 @@ git log --oneline -- .parallel-agent/单轨/台账
 #### F13 安装器边界（沙箱，不动全局）
 
 ```powershell
-$tmp = Join-Path $env:TEMP 'pa-v3-full-install-check'
+$tmp = Join-Path $env:TEMP 'agt-v3-full-install-check'
 Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue
-node "<ParallelAgentv3仓库>\packages\cli\index.js" init --root $tmp --dry-run
-node "<ParallelAgentv3仓库>\packages\cli\index.js" init --root $tmp
-node "<ParallelAgentv3仓库>\packages\cli\index.js" init --root $tmp
+node "<Agent-Agtv3仓库>\packages\cli\index.js" init --root $tmp --dry-run
+node "<Agent-Agtv3仓库>\packages\cli\index.js" init --root $tmp
+node "<Agent-Agtv3仓库>\packages\cli\index.js" init --root $tmp
 ```
 
 判定：
@@ -263,7 +263,7 @@ node "<ParallelAgentv3仓库>\packages\cli\index.js" init --root $tmp
 - dry-run 报告待复制文件数（应 16）
 - 首次安装落盘 16 文件 + `install-state.json`
 - 二次执行“复制 0、跳过 16”
-- 哨兵法：向 `$tmp\.parallel-agent\能力档案\trae-cn.md` 写入任意内容 → 再执行 init → 内容不变
+- 哨兵法：向 `$tmp\.agent-agt\能力档案\trae-cn.md` 写入任意内容 → 再执行 init → 内容不变
 
 #### F14 并发上限（可选，需我授权）
 
@@ -297,14 +297,14 @@ node "<ParallelAgentv3仓库>\packages\cli\index.js" init --root $tmp
 - **部分可用**：F02-F06 通过，但 F07-F10 有 FAIL（说明治理约束未生效）
 - **不可用**：F00 FAIL 或 F02-F06 任一 FAIL
 
-报告必须含：环境版本、每用例结果与证据、失败归类（缺陷 / 环境 / 未验证）、未覆盖项与原因、下一步建议。报告写项目根，必要时复制到 `<ParallelAgentv3仓库>\test-docs\报告\`。
+报告必须含：环境版本、每用例结果与证据、失败归类（缺陷 / 环境 / 未验证）、未覆盖项与原因、下一步建议。报告写项目根，必要时复制到 `<Agent-Agtv3仓库>\test-docs\报告\`。
 
 ### 5. 清理
 
 测试结束前问我是否清理：
 
-- `.parallel-agent/`（项目治理数据）
+- `.agent-agt/`（项目治理数据）
 - 台账与提交（保留或丢弃）
-- 沙箱 `$env:TEMP\pa-v3-full-install-check`
+- 沙箱 `$env:TEMP\agt-v3-full-install-check`
 
 未经确认不得删除。

@@ -88,6 +88,7 @@ test-docs/    # 测试模版、报告、评估
 
 ## 状态
 
+- v3.2.1：首次通过 GitHub Actions OIDC 发布，验证 Agent-Agt 的 Trusted Publisher
 - v3.2.0：项目更名 Agent-Agt；npm 包、Skill 名与共享数据目录同步改为 `agent-agt` / `agent-agt-*` / `.agent-agt`
 - v3.1.0：Skill 安装/更新/卸载交给上游 `npx skills` 或 `gh skill`；本仓库 CLI 只安装共享数据（references / templates / hosts），不建链接、不删除文件
 - v3.0.0：纯文本协议 + 三 Skill + 能力档案 + 零依赖安装器；subagent 轨道，无插件

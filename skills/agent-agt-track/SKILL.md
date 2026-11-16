@@ -1,7 +1,7 @@
 ---
 name: agent-agt-track
 description: Agent-Agt 轨道。被仲裁者以一次性子代理派发时激活：只读指定契约，在自身 scope 内执行一次，写回执文件，只返回一行指针。不读取其他契约、不运行 git、不越界、不做决策。
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Agent-Agt 轨道（track）

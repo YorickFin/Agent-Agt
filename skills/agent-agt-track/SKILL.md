@@ -1,17 +1,17 @@
 ---
-name: parallelagent-track
-description: ParallelAgent 轨道。被仲裁者以一次性子代理派发时激活：只读指定契约，在自身 scope 内执行一次，写回执文件，只返回一行指针。不读取其他契约、不运行 git、不越界、不做决策。
-version: 3.1.0
+name: agent-agt-track
+description: Agent-Agt 轨道。被仲裁者以一次性子代理派发时激活：只读指定契约，在自身 scope 内执行一次，写回执文件，只返回一行指针。不读取其他契约、不运行 git、不越界、不做决策。
+version: 3.2.0
 ---
 
-# ParallelAgent 轨道（track）
+# Agent-Agt 轨道（track）
 
 ## 输入
 
 派发时只会拿到三样：
 
-1. 契约路径（例如 `.parallel-agent/契约/第1轮/T-A-v1.md`）
-2. 回执路径（例如 `.parallel-agent/回执/第1轮/T-A-v1.md`）
+1. 契约路径（例如 `.agent-agt/契约/第1轮/T-A-v1.md`）
+2. 回执路径（例如 `.agent-agt/回执/第1轮/T-A-v1.md`）
 3. 返回格式：`T-A ok <产物路径>`
 
 ## 执行流程

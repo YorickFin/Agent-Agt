@@ -16,9 +16,9 @@ Thumbs.db
 *.pem
 *.key
 
-# ParallelAgent 运行数据与本地工作台
-.parallel-agent/
-.pa-test/
+# Agent-Agt 运行数据与本地工作台
+.agent-agt/
+.agt-test/
 .trae/
 .workbuddy/
 .screenshots/

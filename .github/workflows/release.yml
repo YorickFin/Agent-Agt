@@ -1,4 +1,4 @@
-# Copyright 2026 ParallelAgent Contributors
+# Copyright 2026 Agent-Agt Contributors
 # SPDX-License-Identifier: Apache-2.0
 
 # 发布流程：打 v* tag 触发 → npm pack（prepack 复制 assets）→ GitHub Release → npm publish
@@ -41,7 +41,7 @@ jobs:
           set -euo pipefail
           node --check index.js
           npm pack
-          TARBALL=$(ls parallelagent-*.tgz | head -n1)
+          TARBALL=$(ls agent-agt-*.tgz | head -n1)
           echo "TARBALL=$TARBALL" >> "$GITHUB_ENV"
 
       - name: Delete existing release if any
@@ -59,8 +59,8 @@ jobs:
         run: |
           set -euo pipefail
           VERSION=$(node -p "require('./package.json').version")
-          if npm view "parallelagent@$VERSION" version >/dev/null 2>&1; then
-            echo "parallelagent@$VERSION 已发布，跳过"
+          if npm view "agent-agt@$VERSION" version >/dev/null 2>&1; then
+            echo "agent-agt@$VERSION 已发布，跳过"
           else
             npm publish --access public --provenance --registry https://registry.npmjs.org/
           fi

@@ -1,18 +1,18 @@
 ---
-name: parallelagent-arbiter
-description: ParallelAgent 仲裁者。用户明确要求并行/拆轨，或单轨 Skill 移交 L4 时激活。负责能力档案校验、写任务卡/分流卡/契约、分批派发一次性子代理轨道、收集指针、越界扫描、实检、落快照、统一提交与收尾路由。不亲自写业务代码、不代写回执。
-version: 3.1.0
+name: agent-agt-arbiter
+description: Agent-Agt 仲裁者。用户明确要求并行/拆轨，或单轨 Skill 移交 L4 时激活。负责能力档案校验、写任务卡/分流卡/契约、分批派发一次性子代理轨道、收集指针、越界扫描、实检、落快照、统一提交与收尾路由。不亲自写业务代码、不代写回执。
+version: 3.2.0
 ---
 
-# ParallelAgent 仲裁者（arbiter）
+# Agent-Agt 仲裁者（arbiter）
 
 ## 依赖
 
-- `~/.parallel-agent/references/协议.md`
-- `~/.parallel-agent/references/分流.md`
-- `~/.parallel-agent/templates/`
-- `~/.parallel-agent/能力档案/<host>.md`（全局）
-- `.parallel-agent/能力档案.md`（可选项目覆盖）
+- `~/.agent-agt/references/协议.md`
+- `~/.agent-agt/references/分流.md`
+- `~/.agent-agt/templates/`
+- `~/.agent-agt/能力档案/<host>.md`（全局）
+- `.agent-agt/能力档案.md`（可选项目覆盖）
 
 ## 工作流
 
@@ -34,7 +34,7 @@ version: 3.1.0
 
 ### 2. 写契约
 
-- 每轨一份，路径 `.parallel-agent/契约/第N轮/T-X-vM.md`
+- 每轨一份，路径 `.agent-agt/契约/第N轮/T-X-vM.md`
 - 用 `templates/契约.md`；`scope` 互不相交
 - 契约**自足**：不依赖轨道记得任何历史
 - 写**转达**（只放指针）
@@ -85,7 +85,7 @@ version: 3.1.0
 
 探测全程由 Agent 按步骤执行，**不写脚本**。探测在临时目录进行，测完清理。
 
-若 `~/.parallel-agent/hosts/<host>.md` 已存在且 `host_version` 与当前一致，可直接建议用户采用该预置实测值（`confidence: 实测`），仍需用户确认后才复制为能力档案。
+若 `~/.agent-agt/hosts/<host>.md` 已存在且 `host_version` 与当前一致，可直接建议用户采用该预置实测值（`confidence: 实测`），仍需用户确认后才复制为能力档案。
 
 ## fail-stop
 

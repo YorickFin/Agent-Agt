@@ -1,4 +1,4 @@
-# 参与 ParallelAgent
+# 参与 Agent-Agt
 
 ## 分支模型
 
@@ -36,8 +36,8 @@ test-docs/    # 测试模版、报告、评估、归档
 ```powershell
 node --check packages/cli/index.js
 node packages/cli/index.js --help
-node packages/cli/index.js init --root "$env:TEMP\pa-v3-test"
-node packages/cli/index.js init --root "$env:TEMP\pa-v3-test" --force
+node packages/cli/index.js init --root "$env:TEMP\agt-v3-test"
+node packages/cli/index.js init --root "$env:TEMP\agt-v3-test" --force
 ```
 
 Skill 安装不在本仓库校验范围内，冒烟时可用上游命令（本地目录也可）：
@@ -45,25 +45,25 @@ Skill 安装不在本仓库校验范围内，冒烟时可用上游命令（本�
 ```powershell
 npx skills add . -g -a trae-cn
 npx skills list
-npx skills remove --global -a trae-cn parallelagent-*
+npx skills remove --global -a trae-cn agent-agt-*
 ```
 
 安装后检查：
 
 ```powershell
-Test-Path "$env:TEMP\pa-v3-test\.parallel-agent\references\协议.md"
-Test-Path "$env:TEMP\pa-v3-test\.parallel-agent\templates\任务卡.md"
-Test-Path "$env:TEMP\pa-v3-test\.parallel-agent\hosts\agents.md"
-Test-Path "$env:TEMP\pa-v3-test\.parallel-agent\能力档案"
-Test-Path "$env:TEMP\pa-v3-test\.parallel-agent\install-state.json"
-Test-Path "$env:TEMP\pa-v3-test\.agents\skills\parallelagent-solo"   # 应为 False：CLI 不装 Skill
+Test-Path "$env:TEMP\agt-v3-test\.agent-agt\references\协议.md"
+Test-Path "$env:TEMP\agt-v3-test\.agent-agt\templates\任务卡.md"
+Test-Path "$env:TEMP\agt-v3-test\.agent-agt\hosts\agents.md"
+Test-Path "$env:TEMP\agt-v3-test\.agent-agt\能力档案"
+Test-Path "$env:TEMP\agt-v3-test\.agent-agt\install-state.json"
+Test-Path "$env:TEMP\agt-v3-test\.agents\skills\agent-agt-solo"   # 应为 False：CLI 不装 Skill
 ```
 
 dry-run 不落盘：
 
 ```powershell
-node packages/cli/index.js init --root "$env:TEMP\pa-v3-dry" --dry-run
-if (Test-Path "$env:TEMP\pa-v3-dry") { throw 'dry-run 不应创建目录' }
+node packages/cli/index.js init --root "$env:TEMP\agt-v3-dry" --dry-run
+if (Test-Path "$env:TEMP\agt-v3-dry") { throw 'dry-run 不应创建目录' }
 ```
 
 涉及协议、Skill 或行为的改动，必须同步更新对应文档：
@@ -81,7 +81,7 @@ if (Test-Path "$env:TEMP\pa-v3-dry") { throw 'dry-run 不应创建目录' }
 | 设计与实施 | `docs/` |
 | 测试 | `test-docs/模版/`、`test-docs/报告/` |
 
-协议类改动至少跑一遍 `test-docs/模版/ParallelAgent v3 最小全量测试.md` 中的 V1-V4。
+协议类改动至少跑一遍 `test-docs/模版/Agent-Agt v3 最小全量测试.md` 中的 V1-V4。
 
 ## 敏感信息自查
 
@@ -93,7 +93,7 @@ if (Test-Path "$env:TEMP\pa-v3-dry") { throw 'dry-run 不应创建目录' }
 |---|---|---|
 | 密钥与凭据 | API key、access token、私钥、`.npmrc` 中的 authToken | 已泄露的先撤销并轮换，不能只删文件 |
 | 环境文件 | `.env`、`.env.*`、`*.pem`、`*.key` | 已由 `.gitignore` 排除 |
-| 运行产物 | `.parallel-agent/`（契约、台账、回执、信号）、日志、`packages/cli/assets/`、`*.tgz` | 已由 `.gitignore` 排除 |
+| 运行产物 | `.agent-agt/`（契约、台账、回执、信号）、日志、`packages/cli/assets/`、`*.tgz` | 已由 `.gitignore` 排除 |
 | 私人内容 | `._private/` 下的博客/投稿草稿、客户或未公开项目资料 | 不要使用 `git add -f` 强行加入 |
 | 本机信息 | `C:\Users\<name>`、`E:\...` 绝对路径、系统用户名、机器名、PID、会话标题 | 替换为 `<repo>`、`%USERPROFILE%`、`<宿主目录>` 等占位符 |
 
@@ -109,7 +109,7 @@ git grep -n -I -E '(C:\\Users\\|D:\\Programs\\|E:\\)'
 git grep -n -I -E '(ghp_|github_pat_|npm_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|BEGIN [A-Z ]*PRIVATE KEY)'
 
 # 私有文件与生成物是否被追踪
-git ls-files | Select-String -Pattern '(\.env|\.parallel-agent|\._private|\.log$|\.tgz$|packages/cli/assets)'
+git ls-files | Select-String -Pattern '(\.env|\.agent-agt|\._private|\.log$|\.tgz$|packages/cli/assets)'
 
 # 提交身份（author/committer 应为本人）
 git log -1 --format='A: %an <%ae> | C: %cn <%ce>'
@@ -138,7 +138,7 @@ git log -1 --format='A: %an <%ae> | C: %cn <%ce>'
 ### 发布前复核
 
 - [ ] 全仓无本机绝对路径、系统用户名、真实邮箱、PID、会话标题
-- [ ] `git ls-files` 无 `.env`、`.npmrc`、`.parallel-agent/`、日志、`packages/cli/assets/`、`*.tgz`
+- [ ] `git ls-files` 无 `.env`、`.npmrc`、`.agent-agt/`、日志、`packages/cli/assets/`、`*.tgz`
 - [ ] npm 包内容不含私人资料或测试草稿
 - [ ] 已确认历史遗留项：删除的文件仍可从旧 commit 取出，必要时评估改写历史
 - [ ] GitHub 仓库已开启 Secret Scanning 与 Push Protection
@@ -185,4 +185,4 @@ $env:GIT_COMMITTER_EMAIL = '<id>+<username>@users.noreply.github.com'
 ## 报告问题
 
 请附上：宿主类型与版本、能力档案、`install-state.json` 摘要和相关回执片段。
-不要提交 `.parallel-agent/` 下的任何内容（已在 `.gitignore` 中整体排除）。
+不要提交 `.agent-agt/` 下的任何内容（已在 `.gitignore` 中整体排除）。

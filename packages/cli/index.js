@@ -2,9 +2,9 @@
 'use strict';
 
 /**
- * ParallelAgent v3 安装器
+ * Agent-Agt v3 安装器
  *
- * 边界：只把共享数据（references / templates / hosts）复制到 <root>/.parallel-agent，
+ * 边界：只把共享数据（references / templates / hosts）复制到 <root>/.agent-agt，
  * 并写 install-state.json。
  *
  * 不安装 Skill、不创建链接、不删除任何文件。
@@ -18,14 +18,14 @@ const crypto = require('crypto');
 
 const PKG = require('./package.json');
 
-const DATA_DIR = '.parallel-agent';
-const SKILLS_REPO = 'YorickFin/ParallelAgent';
+const DATA_DIR = '.agent-agt';
+const SKILLS_REPO = 'YorickFin/Agent-Agt';
 
 function usage() {
-  console.log(`ParallelAgent v3.1 共享数据安装器 ${PKG.version}
+  console.log(`Agent-Agt v3.2 共享数据安装器 ${PKG.version}
 
 用法：
-  parallelagent init [选项]
+  agent-agt init [选项]
 
 选项：
   --root <目录>   安装根目录（默认用户主目录，用于测试/隔离）
@@ -179,7 +179,7 @@ function init(opts) {
   npx skills add ${SKILLS_REPO} -g -a trae-cn
   gh skill install ${SKILLS_REPO} --scope user --agent trae-cn
 
-卸载同样交给上游：npx skills remove --global -a trae-cn parallelagent-*
+卸载同样交给上游：npx skills remove --global -a trae-cn agent-agt-*
 
 首次使用前需要一份能力档案（~/${DATA_DIR}/能力档案/<host>.md）。
 可参考 ~/${DATA_DIR}/hosts/ 下预置档案或 能力档案-模板.md；confidence 非「实测」时需确认。

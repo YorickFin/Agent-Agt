@@ -1,8 +1,8 @@
-# ParallelAgent v3 一期实施方案
+# Agent-Agt v3 一期实施方案
 
 - 状态：草案（待评审）
 - 日期：2026-10-27
-- 上游设计：[ParallelAgent v3 方案设计](../设计/ParallelAgent%20v3%20方案设计.md)、[ParallelAgent v3 生命周期治理方案](../设计/ParallelAgent%20v3%20生命周期治理方案.md)
+- 上游设计：[Agent-Agt v3 方案设计](../设计/Agent-Agt%20v3%20方案设计.md)、[Agent-Agt v3 生命周期治理方案](../设计/Agent-Agt%20v3%20生命周期治理方案.md)
 - 验证宿主：Trae CN（一期只验证这一个；协议本身保持宿主中立）
 
 ---
@@ -23,7 +23,7 @@
 |---|---|
 | 协议 | 分流卡、任务卡、台账、契约、转达、回执、快照、交接手册的字段与校验规则 |
 | 模板 | 上述八类文件的空白模板 |
-| Skill | `parallelagent-solo` / `parallelagent-arbiter` / `parallelagent-track` |
+| Skill | `agent-agt-solo` / `agent-agt-arbiter` / `agent-agt-track` |
 | 共享 reference | `分流.md` / `台账.md` / `协议.md` |
 | 能力档案 | 模板 + Trae CN 预置实测值 + 引导式探测流程（三种来源填同一份档案）+ 档案有效性检查，含 `schema_version` 与 `confidence` |
 | 执行器 | 仅 subagent（宿主原生），分批 ≤ 5 |
@@ -44,14 +44,14 @@
 ## 2. 仓库结构（一期目标态）
 
 ```
-ParallelAgentv3/
+Agent-Agtv3/
 ├── docs/
 │   ├── 设计/                  # 已存在两份设计文档
 │   └── 实施/                  # 本文件
 ├── skills/
-│   ├── parallelagent-solo/SKILL.md
-│   ├── parallelagent-arbiter/SKILL.md
-│   └── parallelagent-track/SKILL.md
+│   ├── agent-agt-solo/SKILL.md
+│   ├── agent-agt-arbiter/SKILL.md
+│   └── agent-agt-track/SKILL.md
 ├── references/
 │   ├── 协议.md                # 文件字段、校验规则、扫描算法
 │   ├── 分流.md                # L0-L4 判据
@@ -111,9 +111,9 @@ ParallelAgentv3/
 
 | Skill | 一期职责 | 完成判据 |
 |---|---|---|
-| `parallelagent-solo` | L0-L3 分流、任务卡、单轨台账 | 能在无 `.parallel-agent/` 的项目里正确分流并落台账 |
-| `parallelagent-arbiter` | 读能力档案 → 写契约 → 分批 spawn → 扫描 → 快照 → 统一提交 | 一次三轨任务可全自动走完，不依赖插件 |
-| `parallelagent-track` | 只认契约文件，执行一次，写回执，返回一行 | 同一契约重复执行结果一致（幂等） |
+| `agent-agt-solo` | L0-L3 分流、任务卡、单轨台账 | 能在无 `.agent-agt/` 的项目里正确分流并落台账 |
+| `agent-agt-arbiter` | 读能力档案 → 写契约 → 分批 spawn → 扫描 → 快照 → 统一提交 | 一次三轨任务可全自动走完，不依赖插件 |
+| `agent-agt-track` | 只认契约文件，执行一次，写回执，返回一行 | 同一契约重复执行结果一致（幂等） |
 
 仲裁者 Skill 必须包含的硬规则：
 
@@ -129,7 +129,7 @@ ParallelAgentv3/
 | `hosts/能力档案-模板.md` | 设计文档附录 A 的字段，留空可填 |
 | `hosts/trae-cn.md` | 预置实测值：`max_concurrency: 5`、`nested: no`、`resume: yes`、`sandbox.shell: yes`、`sandbox.fs_write: yes`、`fs.guard: no`、`isolation.process: in-process`、`vcs.git: yes` |
 
-- 安装位置：`~/.parallel-agent/能力档案/trae-cn.md`（全局），一期不做项目覆盖
+- 安装位置：`~/.agent-agt/能力档案/trae-cn.md`（全局），一期不做项目覆盖
 - 档案里必须写 `probed_at`、`host_version`、`schema_version` 与 `confidence`（可信度声明），便于升级后失效、降级时取保守值
 - **档案有效性检查**（由 Agent 读取比对，不写脚本）：Skill 首次激活与**每次 L4 预检**各做一次；`schema_version` / `host_version` / 探测项清单任一不一致 → 提示三选一（立即重测 / 暂用旧档案 / 其它）
 - L0-L3 不做校验
@@ -160,10 +160,10 @@ V3 与 V4 是必须项；V5-V7 允许在二期补测，但方案里必须写明�
 
 | 项 | 要求 |
 |---|---|
-| 命令形态 | Skill：`npx skills add YorickFin/ParallelAgent -g -a agents`；共享数据：`npx parallelagent@latest init` |
-| 动作 | CLI 只复制 3 份 reference、8 份模板、能力档案模板到 `~/.parallel-agent/`；不安装 Skill、不建链接、不删除文件 |
+| 命令形态 | Skill：`npx skills add YorickFin/Agent-Agt -g -a agents`；共享数据：`npx agent-agt@latest init` |
+| 动作 | CLI 只复制 3 份 reference、8 份模板、能力档案模板到 `~/.agent-agt/`；不安装 Skill、不建链接、不删除文件 |
 | 安装状态 | 写 `install-state.json`（安装版本、数据目录、各文件校验和、安装时间）；**CLI 独有，Agent 不写** |
-| 升级覆盖 | 产品文件**全量覆盖**；若校验和与 `install-state.json` 不符（用户改过），写 `<file>.new` 并提示；**能力档案与项目 `.parallel-agent/` 永不覆盖** |
+| 升级覆盖 | 产品文件**全量覆盖**；若校验和与 `install-state.json` 不符（用户改过），写 `<file>.new` 并提示；**能力档案与项目 `.agent-agt/` 永不覆盖** |
 | 首次提示 | 安装结束时打印 §7.2 的三选一提示（立即初始化 / 触发 L4 时再测 / 其它：用户自由输入），**不代替用户做选择** |
 | 边界 | 不探测、不写能力档案、不碰项目目录 |
 | 约束 | 零运行时依赖；不注册服务；不改宿主配置；重复执行幂等 |
@@ -222,7 +222,7 @@ V3 与 V4 是必须项；V5-V7 允许在二期补测，但方案里必须写明�
 - [ ] `hosts/trae-cn.md` 已填实测值，含 `probed_at`、`host_version`、`schema_version` 与 `confidence`
 - [ ] 档案有效性检查生效：版本不一致时能提示三选一，而不是静默沿用
 - [ ] `install-state.json` 记录安装版本与文件校验和；升级时用户改过的文件不被静默覆盖
-- [ ] `npx parallelagent@latest init` 可一条命令完成安装，且打印首次运行提示
+- [ ] `npx agent-agt@latest init` 可一条命令完成安装，且打印首次运行提示
 - [ ] 在真实项目完成一次 L0 与一次 L4 三轨任务
 - [ ] 越界注入用例命中，并按规则收回该轨
 - [ ] 一次冷启动接管成功（新会话读手册后能继续）

@@ -4,9 +4,9 @@
 - 执行者：WorkBuddy（deepseek-v4.1-flash）自身实测
 - 环境：Windows 10/11 / WorkBuddy 5.8.3（Electron + `codebuddy-lite-wb.mjs` 内核）/ Node 22.22.2
 - 观测方式：内核实证（拆 `app.asar` 与 `cli/dist`）+ 行为实测（起团、跑轮次、读落盘文件）
-- 评估对象：`<ParallelAgent仓库>`（作为参照系）
+- 评估对象：`<Agent-Agt仓库>`（作为参照系）
 
-> **这份文档回答什么**：WorkBuddy 内的多 Agent 能力，能不能承载 ParallelAgent 那套「单项目多轨并行 + 文件契据治理」的设计；能承载哪一半，不能承载哪一半，为什么。
+> **这份文档回答什么**：WorkBuddy 内的多 Agent 能力，能不能承载 Agent-Agt 那套「单项目多轨并行 + 文件契据治理」的设计；能承载哪一半，不能承载哪一半，为什么。
 
 ---
 
@@ -101,7 +101,7 @@ isAgentTeamsEnabled() { return !isAgentHomeJobBlockingAgentTeams() && TeamManage
 ~/.workbuddy/tasks/<team>/<n>.json
 ```
 
-- 与 ParallelAgent「数据面 100% 文件」同构，但**只有元数据**，无契约/台账/快照语义，需自建
+- 与 Agent-Agt「数据面 100% 文件」同构，但**只有元数据**，无契约/台账/快照语义，需自建
 
 ### W04 后端类型：in-process 是唯一可用形态
 
@@ -127,7 +127,7 @@ TeamMailbox.send(team, name, { from: 'team-lead', text: prompt, ... })
 // kill: SIGTERM + 等 5s
 ```
 
-即：独立后台 CLI 进程 + 真实 pid + 日志文件 + 信箱投递。**形态与 ParallelAgent 的轨道高度接近，但拿不到。**
+即：独立后台 CLI 进程 + 真实 pid + 日志文件 + 信箱投递。**形态与 Agent-Agt 的轨道高度接近，但拿不到。**
 
 三次尝试与结果：
 
@@ -171,14 +171,14 @@ round3 by=track-a turns=3
 ### W08 成员写文件能力
 
 - 成员可自由 `Read` / `Write` / `Bash`，与主理人权限一致（`general-purpose` 类型）
-- 结论：ParallelAgent 的**契约、台账、回执、交接手册全部可以落盘**，缺的不是数据面
+- 结论：Agent-Agt 的**契约、台账、回执、交接手册全部可以落盘**，缺的不是数据面
 
 ### W09 XERJ MCP 接入
 
 - 初始状态：`~/.workbuddy/mcp.json` 不存在，工具清单无 `xerj_*`；XERJ 节点本身正常（PID <pid>，127.0.0.1:8080/8081/9200，索引 `autoindex-catalog` / `lib-docs` / `.xerj-memory-library-edges` 全 green）
 - 处置：照 Trae 配置写入 stdio 形态（`command: <xerj安装目录>\xerj.exe`、`args: ["mcp"]`、`env: XERJ_URL / XERJ_DISABLE_FEEDBACK`）→ 重启 → 生效
 - 实测：`xerj_search(index=lib-docs, query="并行")` → 761 命中，首条《多AI并行开发-仲裁体系与轮次转达》
-- **遗留**：`xerj_map` 显示仅索引 `lib-docs`（笔记库），**ParallelAgent 仓库未被 autoindex**；检索代码前需 `xerj autoindex "<ParallelAgent仓库>"`
+- **遗留**：`xerj_map` 显示仅索引 `lib-docs`（笔记库），**Agent-Agt 仓库未被 autoindex**；检索代码前需 `xerj autoindex "<Agent-Agt仓库>"`
 
 ### W10 提示缓存
 
@@ -220,9 +220,9 @@ round3 by=track-a turns=3
 ---
 
 
-## 3. 与 ParallelAgent 的架构对比
+## 3. 与 Agent-Agt 的架构对比
 
-| 设计要素 | ParallelAgent | WorkBuddy in-process 团队 |
+| 设计要素 | Agent-Agt | WorkBuddy in-process 团队 |
 |---|---|---|
 | 轨道实体 | 独立 Trae 会话窗口（真进程） | 同进程协程 |
 | 建/切/派/删 | 编排器插件（CDP + HTTP 网关） | 主理人调 `Agent` / `SendMessage` |
@@ -256,7 +256,7 @@ reasoning              7,161 字符  (15%)
 - `resume` 隔久了（`ephemeral` 5 分钟 TTL 过期）= 冷启动全价重算
 - `autoCompact` 存在（内核 22 处引用）；`CODEBUDDY_REPLAY_SHOW_PRE_COMPACT` 默认 false，即重放读取的是**压缩后**历史，不回退到压缩前
 
-**反直觉结论**：ParallelAgent 的「短命轨道 + 契据交接」在 token 上更省——用**文件替代历史**，天然规避上下文膨胀；常驻协程则是用 token 换连续性。
+**反直觉结论**：Agent-Agt 的「短命轨道 + 契据交接」在 token 上更省——用**文件替代历史**，天然规避上下文膨胀；常驻协程则是用 token 换连续性。
 
 ---
 
@@ -264,7 +264,7 @@ reasoning              7,161 字符  (15%)
 
 ### 5.1 先纠正一个框架错误（勘误）
 
-本报告初版把 ParallelAgent 的核心价值定在「控制面（CDP）」，由此推出「不要迁到 WorkBuddy」。这个推理是错的，错在**把「WorkBuddy 缺什么」当成了「ParallelAgent 的核心是什么」**——这是两个不同的问题。
+本报告初版把 Agent-Agt 的核心价值定在「控制面（CDP）」，由此推出「不要迁到 WorkBuddy」。这个推理是错的，错在**把「WorkBuddy 缺什么」当成了「Agent-Agt 的核心是什么」**——这是两个不同的问题。
 
 按项目自身的表述，CDP 只是 L4 多轨的**执行器**：
 
@@ -284,7 +284,7 @@ reasoning              7,161 字符  (15%)
 
 ### 5.3 修正后的建议
 
-1. **ParallelAgent 的核心（工作流 + 基于文档的可溯源性）在 WorkBuddy 内是可承载的**，且不需要 CDP——因为 WorkBuddy 自带会话调度，补丁本身没有存在必要。
+1. **Agent-Agt 的核心（工作流 + 基于文档的可溯源性）在 WorkBuddy 内是可承载的**，且不需要 CDP——因为 WorkBuddy 自带会话调度，补丁本身没有存在必要。
 2. **真正无法搬运的是「隔离与自愈」**：主进程一死全部轨道同死，没有外部调度器在崩溃后按文件重建轨道，没有身份断言拦截越界下发。这会让「溯源」从「强保证」降级为「事后可查」。
 3. 换句话说：**迁过去会丢掉的是「可信度等级」，不是「工作流本身」**。评估重点应从「能不能并行」转为「治理强度能保住几成」。
 4. 若坚持进程级隔离：当前只能留在 Trae + 编排器插件，或在 WorkBuddy 外另起宿主自建 API 调度。
@@ -317,9 +317,9 @@ reasoning              7,161 字符  (15%)
 
 ### 7.1 结论
 
-**ParallelAgent 的轨道执行单元，应当用一次性（空壳）subagent，而不是常驻多轨会话或团队模式。**
+**Agent-Agt 的轨道执行单元，应当用一次性（空壳）subagent，而不是常驻多轨会话或团队模式。**
 
-判据不是「哪个能力强」，而是「哪个与治理模型同构」：ParallelAgent 的前提是**契据文件是唯一事实源**，而常驻会话会引入第二个事实源。
+判据不是「哪个能力强」，而是「哪个与治理模型同构」：Agent-Agt 的前提是**契据文件是唯一事实源**，而常驻会话会引入第二个事实源。
 
 ### 7.2 为什么空壳更契合
 
@@ -364,7 +364,7 @@ reasoning              7,161 字符  (15%)
 
 ### 7.5 概念映射
 
-| ParallelAgent 概念 | WorkBuddy 一次性 subagent 对应物 |
+| Agent-Agt 概念 | WorkBuddy 一次性 subagent 对应物 |
 |---|---|
 | 轨道执行一次 | `Agent(subagent_type=general-purpose, prompt=契据路径+要求)` |
 | 回执 | subagent 的最终返回文本 + 它写入的回执文件 |
@@ -404,7 +404,7 @@ getMaxSubagentsPerSession()  { ...默认 return h /* 200 */ }
 | 落法 | 做法 | 取舍 |
 |---|---|---|
 | 成员自写 | subagent 自己 `Write` 回执文件，只返回「路径 + 状态」 | 主理人上下文最省；但「落笔权」在成员手上 |
-| 主理人落笔 | subagent 只返回结构化文本，主理人校验后写文件 | 与 ParallelAgent 的「仲裁者落笔」一致，可审计性更强 |
+| 主理人落笔 | subagent 只返回结构化文本，主理人校验后写文件 | 与 Agent-Agt 的「仲裁者落笔」一致，可审计性更强 |
 
 建议：**成员写文件 + 只返回短指针**（路径、状态、`git diff --name-only` 结果、契约版本号），避免把回执正文塞进主理人上下文——否则多轨并行时主理人自己的上下文会先爆。
 

@@ -1,21 +1,21 @@
-# ParallelAgent v3 最小全量测试
+# Agent-Agt v3 最小全量测试
 
 > **用途**：在一个**空项目**里打开 Trae，把下面「提示词正文」整段交给 AI 执行。
 > **目标**：用最少用例覆盖 v3 的完整链路——Skill 激活 → 单轨台账 → L4 双轨并行 → 冷启动。全部通过即说明一期主链路可用。
-> **使用前替换**：`<ParallelAgentv3仓库>` → `<ParallelAgentv3仓库绝对路径>`（只读参考，不在其中改动）。
+> **使用前替换**：`<Agent-Agtv3仓库>` → `<Agent-Agtv3仓库绝对路径>`（只读参考，不在其中改动）。
 
 ---
 
 ## 提示词正文
 
-你是 **ParallelAgent v3 最小全量测试**的执行者。当前项目是空项目，你要在这里跑完最小完整链路，并在项目根写 `ParallelAgent v3 最小全量测试报告.md`。
+你是 **Agent-Agt v3 最小全量测试**的执行者。当前项目是空项目，你要在这里跑完最小完整链路，并在项目根写 `Agent-Agt v3 最小全量测试报告.md`。
 
 ### 0. 硬性规则
 
 1. **不许编造结果**。未执行的用例标 `BLOCKED`，写清原因与前置条件。
 2. 证据只认可核对内容：文件路径、命令 + 输出/退出码、`git diff`、文件内容。禁止写“已测试”“应该没问题”。
-3. **不要修改** `~/.trae-cn/skills/parallelagent-*` 与 `~/.parallel-agent/references|templates|hosts`（那是被测对象）。
-4. 不要改 `<ParallelAgentv3仓库>`；报告写完后由**用户手动**复制到 `<ParallelAgentv3仓库>\test-docs\报告\`，执行者不代做。
+3. **不要修改** `~/.trae-cn/skills/agent-agt-*` 与 `~/.agent-agt/references|templates|hosts`（那是被测对象）。
+4. 不要改 `<Agent-Agtv3仓库>`；报告写完后由**用户手动**复制到 `<Agent-Agtv3仓库>\test-docs\报告\`，执行者不代做。
 5. **Skill 未激活就记 FAIL**，不要手工模拟它的流程来凑通过。
 6. 涉及删除、重置、卸载的操作先问我；本测试默认不需要。
 7. 每完成一个用例立即把结果与证据写进报告，不要最后补写。
@@ -27,15 +27,15 @@
 "PROJECT=$PWD"
 "NODE=$(node -v)"
 "GIT=$(git --version)"
-Get-ChildItem "$env:USERPROFILE\.trae-cn\skills" | Where-Object Name -match 'parallelagent' | Select-Object Name
-Get-ChildItem "$env:USERPROFILE\.parallel-agent" -Recurse -File | Select-Object FullName
-Get-Content "$env:USERPROFILE\.parallel-agent\能力档案\trae-cn.md" -TotalCount 12
+Get-ChildItem "$env:USERPROFILE\.trae-cn\skills" | Where-Object Name -match 'agent-agt' | Select-Object Name
+Get-ChildItem "$env:USERPROFILE\.agent-agt" -Recurse -File | Select-Object FullName
+Get-Content "$env:USERPROFILE\.agent-agt\能力档案\trae-cn.md" -TotalCount 12
 ```
 
 判定：
 
-- 三个 Skill 存在（`parallelagent-solo/arbiter/track`）
-- `~/.parallel-agent` 下存在 `references/` `templates/` `hosts/` `install-state.json`
+- 三个 Skill 存在（`agent-agt-solo/arbiter/track`）
+- `~/.agent-agt` 下存在 `references/` `templates/` `hosts/` `install-state.json`
 - 能力档案存在且 `schema_version: 1`、`max_concurrency: 5`、`confidence: 实测`
 - 任一项缺失 → 记录 FAIL 并停止后续（环境不满足）
 
@@ -50,7 +50,7 @@ git init
 `package.json`
 ```json
 {
-  "name": "pa-v3-min-test",
+  "name": "agt-v3-min-test",
   "private": true,
   "type": "module",
   "scripts": { "test": "node --test" }
@@ -93,11 +93,11 @@ node --test
 
 预期：
 
-- 激活 `parallelagent-solo`，给出 L0 分级判定并落台账（L0 不强制单列分流卡文件；台账条目的「模式」字段即分级依据）
+- 激活 `agent-agt-solo`，给出 L0 分级判定并落台账（L0 不强制单列分流卡文件；台账条目的「模式」字段即分级依据）
 - 只改 `src/greeting.js`
 - 同步更新 `test/greeting.test.js` 的断言（否则测试失败）——这是允许的最小连带
 - 运行 `node --test` 通过
-- 写 `.parallel-agent/单轨/台账/YYYY-MM.md`，条目含 ID（`S-YYYYMMDD-NNN`）、证据、结论、commit hash
+- 写 `.agent-agt/单轨/台账/YYYY-MM.md`，条目含 ID（`S-YYYYMMDD-NNN`）、证据、结论、commit hash
 - 产生一次 git 提交
 
 证据：`git diff --stat`、`node --test` 输出、台账文件内容、`git log --oneline -2`。
@@ -112,9 +112,9 @@ node --test
 
 预期：
 
-- 激活 `parallelagent-arbiter`（或 solo 判定 L4 后移交仲裁者）
+- 激活 `agent-agt-arbiter`（或 solo 判定 L4 后移交仲裁者）
 - 派发前完成 §1.4 三件套确认（验收条件 / 非目标 / 文件边界；本条已在提示词中预置确认语句）
-- 写 `.parallel-agent/分流卡/`、`任务卡`、`交接手册/第1版-开轨前.md`
+- 写 `.agent-agt/分流卡/`、`任务卡`、`交接手册/第1版-开轨前.md`
 - 写 2 份契约：`契约/第1轮/T-A-v1.md`、`T-B-v1.md`，`scope` 互不相交
 - 同一批次并行派发 2 个子代理（不是串行两次）
 - 收齐 2 份回执：`回执/第1轮/T-A-v1.md`、`T-B-v1.md`，frontmatter 含 `kind: 回执`、`contract_version: v1`、`result: ok`
@@ -126,7 +126,7 @@ node --test
 
 证据：
 
-- `git ls-files .parallel-agent` 或文件列表（证明契约/回执/快照存在）
+- `git ls-files .agent-agt` 或文件列表（证明契约/回执/快照存在）
 - 两份契约与回执的 frontmatter（`kind/track/round/contract_version/result/artifacts/scope`）
 - `git log --oneline -3`
 - `node --test` 输出
@@ -136,7 +136,7 @@ node --test
 
 在我新开的会话里发送：
 
-> 读 `.parallel-agent/` 下的台账、快照与交接手册，说明当前完成态、欠账和下一步。
+> 读 `.agent-agt/` 下的台账、快照与交接手册，说明当前完成态、欠账和下一步。
 
 判定：能准确说出已完成项、引用文件路径、给出下一步；不重复问已记录的问题。
 
@@ -158,4 +158,4 @@ node --test
 - **部分可用**：M00 通过，M02/M03 至少一项 FAIL
 - **不可用**：M00 FAIL
 
-报告必须含：环境版本、每个用例的实际结果与证据、失败项归类（缺陷 / 环境 / 未验证）、下一步建议。报告写在项目根，归档到 `<ParallelAgentv3仓库>\test-docs\报告\` 由用户手动完成。
+报告必须含：环境版本、每个用例的实际结果与证据、失败项归类（缺陷 / 环境 / 未验证）、下一步建议。报告写在项目根，归档到 `<Agent-Agtv3仓库>\test-docs\报告\` 由用户手动完成。

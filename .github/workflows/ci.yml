@@ -1,4 +1,4 @@
-# Copyright 2026 ParallelAgent Contributors
+# Copyright 2026 Agent-Agt Contributors
 # SPDX-License-Identifier: Apache-2.0
 
 # PR 与 main 的持续集成：只校验、不发布。
@@ -25,21 +25,21 @@ jobs:
       - name: Help
         run: node packages/cli/index.js --help
       - name: Dry-run shared install
-        run: node packages/cli/index.js init --dry-run --root "$RUNNER_TEMP/pa-v3"
+        run: node packages/cli/index.js init --dry-run --root "$RUNNER_TEMP/agt-v3"
       - name: Install shared data to temp root
-        run: node packages/cli/index.js init --root "$RUNNER_TEMP/pa-v3"
+        run: node packages/cli/index.js init --root "$RUNNER_TEMP/agt-v3"
       - name: Assert shared-only install
         run: |
           set -euo pipefail
-          test -f "$RUNNER_TEMP/pa-v3/.parallel-agent/references/协议.md"
-          test -f "$RUNNER_TEMP/pa-v3/.parallel-agent/templates/任务卡.md"
-          test -f "$RUNNER_TEMP/pa-v3/.parallel-agent/hosts/agents.md"
-          test -f "$RUNNER_TEMP/pa-v3/.parallel-agent/install-state.json"
-          test -d "$RUNNER_TEMP/pa-v3/.parallel-agent/能力档案"
-          test "$(find "$RUNNER_TEMP/pa-v3/.parallel-agent/references" -type f | wc -l)" -eq 3
-          test "$(find "$RUNNER_TEMP/pa-v3/.parallel-agent/templates" -type f | wc -l)" -eq 8
-          test "$(find "$RUNNER_TEMP/pa-v3/.parallel-agent/hosts" -type f | wc -l)" -eq 3
-          test ! -d "$RUNNER_TEMP/pa-v3/.agents/skills"
+          test -f "$RUNNER_TEMP/agt-v3/.agent-agt/references/协议.md"
+          test -f "$RUNNER_TEMP/agt-v3/.agent-agt/templates/任务卡.md"
+          test -f "$RUNNER_TEMP/agt-v3/.agent-agt/hosts/agents.md"
+          test -f "$RUNNER_TEMP/agt-v3/.agent-agt/install-state.json"
+          test -d "$RUNNER_TEMP/agt-v3/.agent-agt/能力档案"
+          test "$(find "$RUNNER_TEMP/agt-v3/.agent-agt/references" -type f | wc -l)" -eq 3
+          test "$(find "$RUNNER_TEMP/agt-v3/.agent-agt/templates" -type f | wc -l)" -eq 8
+          test "$(find "$RUNNER_TEMP/agt-v3/.agent-agt/hosts" -type f | wc -l)" -eq 3
+          test ! -d "$RUNNER_TEMP/agt-v3/.agents/skills"
       # Skill 安装/更新/卸载由上游 npx skills / gh skill 负责，CI 只校验共享数据安装。
 
   verify-protocol:
@@ -53,7 +53,7 @@ jobs:
         run: |
           set -euo pipefail
           for f in references/协议.md references/分流.md references/台账.md; do test -f "$f"; done
-          for n in parallelagent-solo parallelagent-arbiter parallelagent-track; do
+          for n in agent-agt-solo agent-agt-arbiter agent-agt-track; do
             test -f "skills/$n/SKILL.md"
             grep -q "^name: $n$" "skills/$n/SKILL.md"
           done

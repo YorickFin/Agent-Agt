@@ -1,7 +1,7 @@
 # Trae 侧轨道执行单元对照评估：空壳 subagent vs CDP 会话
 
 - 评估日期：2026-10-27
-- 环境：Windows / Trae CN 3.4.9 / Node v24.15.0 / 扩展 agent-agt-orchestrator 2.0.0
+- 环境：Windows / Trae CN 3.4.9 / Node v24.15.0 / 扩展 parallelagent-orchestrator 2.0.0
 - 执行方式：A 组为 TraeCode 会话内实测（与 IDE 共用同一套 Skill 体系，入口差异见 §6）；B 组引用 [v2.0.0 基础测试报告](v2.0.0基础测试报告.md) 的实测记录 + 插件源码核对
 - 对照目的：回答「Agent-Agt 的轨道执行单元，该用一次性空壳 subagent，还是继续用 CDP 驱动的常驻会话」
 - 原始数据：`.pa-test/exp-a/`（本地，已被 .gitignore 忽略，不入库）

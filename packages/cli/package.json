@@ -5,14 +5,14 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YorickFin/Agent-Agt"
+    "url": "git+https://github.com/YorickFin/Agent-Agt.git"
   },
   "homepage": "https://github.com/YorickFin/Agent-Agt",
   "bugs": {
     "url": "https://github.com/YorickFin/Agent-Agt/issues"
   },
   "bin": {
-    "agent-agt": "./index.js"
+    "agent-agt": "index.js"
   },
   "files": [
     "index.js",

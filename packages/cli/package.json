@@ -1,6 +1,6 @@
 {
   "name": "agent-agt",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Agent-Agt v3 共享数据安装器：复制 reference / 模板 / 能力档案模板；Skill 安装与卸载交给 npx skills 或 gh skill",
   "license": "Apache-2.0",
   "repository": {

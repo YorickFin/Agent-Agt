@@ -1,7 +1,7 @@
 ---
 name: agent-agt-solo
 description: 强制触发：Agent-Agt 单轨入口。凡新建或修改项目内文件（代码、配置、文档），或用户提到 Agent-Agt、分流、任务卡、台账、契约、回执、并行、拆轨、v3 协议与模板，必须先调用本技能，再按分流判据执行；禁止跳过本技能直接改文件或直接产出。仅纯问答、查资料、评审不适用。
-version: 3.2.0
+version: 3.2.1
 ---
 
 # Agent-Agt 单轨（solo）
